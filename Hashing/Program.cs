@@ -24,11 +24,14 @@ namespace Hashing
         /// </summary>
         public static void nacitaj()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\users.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\users.csv");
             foreach (string s in lines)
             {
-                string[] tmp = s.Split(' ');
-                users.Add(new Tuple<string, string>(tmp[0], tmp[1]));
+                string[] tmp = s.Split(';');
+                if (String.IsNullOrEmpty(tmp[0]))
+                {
+                    users.Add(new Tuple<string, string>(tmp[0], tmp[1]));
+                }
             }
         }
 
@@ -282,7 +285,7 @@ namespace Hashing
 
             //argonQuerySalt();
             //md5QuerySalt();
-            pbkdfQuerySalt();
+            //pbkdfQuerySalt();
             Console.ReadKey();
         }
 
