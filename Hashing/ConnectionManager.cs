@@ -21,7 +21,7 @@ namespace Hashing
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
             // the code that you want to measure comes here
-            
+            System.Net.ServicePointManager.DefaultConnectionLimit = 100;
             // Create a request using a URL that can receive a post.
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             WebRequest request = WebRequest.Create(URI);
@@ -59,6 +59,7 @@ namespace Hashing
             var time = watch.Elapsed.TotalSeconds;
             Console.Write(time + "--->");
             Console.WriteLine(responseFromServer);
+            Program.uloz(time.ToString(), responseFromServer);
             //Console.WriteLine(responseFromServer.Length);
             // Clean up the streams.  
             reader.Close();
@@ -69,6 +70,7 @@ namespace Hashing
 
         public static void SendData2(string URI,string []data)
         {
+            System.Net.ServicePointManager.DefaultConnectionLimit = 100;
             var watch = System.Diagnostics.Stopwatch.StartNew();
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             WebRequest request = WebRequest.Create(URI);            
@@ -179,7 +181,7 @@ namespace Hashing
             watch.Stop();
             var time = watch.Elapsed.TotalSeconds;
             
-            Console.WriteLine(responseFromServer);
+            Console.WriteLine(time + "  " +responseFromServer);
             reader.Close();
             dataStream.Close();
             response.Close();

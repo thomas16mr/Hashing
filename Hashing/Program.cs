@@ -239,41 +239,48 @@ namespace Hashing
             }
         }
 
-
-        static void Main(string[] args)
+        public static void uloz(string klient,string server)
         {
-            nacitaj();
-            // naplnArgon();
+            using (StreamWriter writetext = File.AppendText(@"C: \Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\write.csv"))
+            {
+                writetext.WriteLine(klient + ";" + server);
+            }
 
-            
+        }
+
+        public static void send()
+        {
+            // naplnArgon();
             //naplnMD5();
             //naplnMD5S();
             //naplnPBKDF();
-            // System.Net.ServicePointManager.DefaultConnectionLimit = 100;
 
-            
-            //    for(int i = 0; i < 5; i++)
-            //    {
-            //        var thread = new System.Threading.Thread(new System.Threading.ThreadStart(Send));
-            //        thread.Start();
-            //    }
-
-            //}
-
-
-            //private void Send()
-            //{
-            //    for (int i = 0; i < 100; i++)
-            //        ConnectionManager.SendData("rnd string");
-            //}
-            //md5Plain();
+            md5Plain();
             //argon2Plain();
             //md5sPlain();
             //pkbdfPlain();
 
             //argonQuerySalt();
-            md5QuerySalt();
+            //md5QuerySalt();
             //pbkdfQuerySalt();
+
+        }
+
+        static void Main(string[] args)
+        {
+            nacitaj();
+
+            int pocetTredov = 1;
+
+
+            for (int i = 0; i < pocetTredov; i++)
+            {
+                var thread = new System.Threading.Thread(new System.Threading.ThreadStart(send));
+                thread.Start();
+            }
+
+            
+            
             Console.ReadKey();
         }
 
