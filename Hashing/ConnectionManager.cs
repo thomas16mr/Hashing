@@ -10,13 +10,16 @@ using Newtonsoft.Json.Linq;
 namespace Hashing
 {
     class ConnectionManager
-    {
+        {
+
+        public static int k=0;
         public ConnectionManager()
         {
 
         }
         public static void SendData(string URI,string data)
         {
+            k++;
             // Create a request using a URL that can receive a post.
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             WebRequest request = WebRequest.Create(URI);
@@ -50,6 +53,7 @@ namespace Hashing
             // Read the content.  
             string responseFromServer = reader.ReadToEnd();
             // Display the content.  
+            Console.Write(k + "--->");
             Console.WriteLine(responseFromServer);
             //Console.WriteLine(responseFromServer.Length);
             // Clean up the streams.  
@@ -100,21 +104,36 @@ namespace Hashing
 
             if (data[0] == "1")
             {
-                byte[] tmp = Convert.FromBase64String(responseFromServer);
-                string s = Encoding.Default.GetString(tmp);
+                byte[] bytes = new byte[responseFromServer.Length / 2];
+                for (var j = 0; j < bytes.Length; j++)
+                {
+                    bytes[j] = Convert.ToByte(responseFromServer.Substring(j * 2, 2), 16);
+                }
+                //bytes to string
+                string s = Encoding.Default.GetString(bytes);                            
                 get = MD5_hasher.GenerateHashWithSalt(data[2], s);
 
             }
             if (data[0] == "2")
             {
-                byte[] tmp = Convert.FromBase64String(responseFromServer);
-                string s = Encoding.Default.GetString(tmp);
+                byte[] bytes = new byte[responseFromServer.Length / 2];
+                for (var j = 0; j < bytes.Length; j++)
+                {
+                    bytes[j] = Convert.ToByte(responseFromServer.Substring(j * 2, 2), 16);
+                }
+                //bytes to string
+                string s = Encoding.Default.GetString(bytes);
                 get = Argon2_hasher.GenerateHash(data[2], s);
             }
             if (data[0] == "3")
             {
-                byte[] tmp = Convert.FromBase64String(responseFromServer);
-                string s = Encoding.Default.GetString(tmp);
+                byte[] bytes = new byte[responseFromServer.Length / 2];
+                for (var j = 0; j < bytes.Length; j++)
+                {
+                    bytes[j] = Convert.ToByte(responseFromServer.Substring(j * 2, 2), 16);
+                }
+                //bytes to string
+                string s = Encoding.Default.GetString(bytes);
                 get = PKDBF2_hasher.GenerateHash(data[2], s);
             }
 

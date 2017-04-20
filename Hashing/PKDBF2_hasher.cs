@@ -39,12 +39,20 @@ namespace Hashing
 
             byte[] hash = pbkdf.GetBytes(16);
 
-            string[] result = new string[2];
+            string resultHash = BitConverter.ToString(hash);
+            resultHash = resultHash.Replace("-", "");
+            resultHash = resultHash.ToLower();
 
-            result[0] = Convert.ToBase64String(hash);
-            result[1] = Convert.ToBase64String(saltArray);
-          //  Console.WriteLine(result[1]);
-            return result;
+            string resultSalt = BitConverter.ToString(saltArray);
+            resultSalt = resultSalt.Replace("-", "");
+            resultSalt = resultSalt.ToLower();
+
+            string [] resultArray = new string[2];
+            resultArray[0] = resultHash;
+            resultArray[1] = resultSalt;
+
+            //returneme dvojicu hash - salt
+            return resultArray;
         }
 
 

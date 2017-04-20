@@ -24,15 +24,17 @@ namespace Hashing
         /// </summary>
         public static void nacitaj()
         {
+            int c = 0;
             string[] lines = System.IO.File.ReadAllLines(@"C:\Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\users.csv");
             foreach (string s in lines)
             {
                 string[] tmp = s.Split(';');
-                if (String.IsNullOrEmpty(tmp[0]))
-                {
+               
                     users.Add(new Tuple<string, string>(tmp[0], tmp[1]));
-                }
+                    c++;
+                
             }
+            
         }
 
         /// <summary>
@@ -240,63 +242,16 @@ namespace Hashing
 
         static void Main(string[] args)
         {
-            //nacitaj();
+            nacitaj();
             // naplnArgon();
 
-            //funguje
-            //byte[] omg = Convert.FromBase64String("c8wad+moCTZjTWNvDpaWqQ==");
-            //string o = Encoding.Default.GetString(omg);
-            //string[] get = Argon2_hasher.GenerateHash("vtj8ZQY6ES",o);
-
+            
             //naplnMD5();
             //naplnMD5S();
             //naplnPBKDF();
             // System.Net.ServicePointManager.DefaultConnectionLimit = 100;
-            string zdroj = "vtj8ZQY6ES";
 
-            byte[] b = Encoding.Default.GetBytes(zdroj);
-            string resultHash = BitConverter.ToString(b);
-            resultHash = resultHash.Replace("-", "");
-            resultHash = resultHash.ToLower();
-
-
-
-           // string[] get = MD5_hasher.GenerateHashWithSalt(zdroj, "");
-            Console.WriteLine(resultHash);
-
-            byte[] bytes = new byte[resultHash.Length / 2];
-            for (var i = 0; i < bytes.Length; i++)
-            {
-                bytes[i] = Convert.ToByte(resultHash.Substring(i * 2, 2), 16);
-            }
-
-            Console.WriteLine(Encoding.Default.GetString(bytes));
-            //byte[] bytes1 = new byte[get[1].Length / 2];
-            //for (var j = 0; j < bytes1.Length; j++)
-            //{
-            //    bytes1[j] = Convert.ToByte(get[1].Substring(j * 2, 2), 16);
-            //}
-
-            //string [] get1= MD5_hasher.GenerateHashWithSalt(get[0],get[1]);
-
-
-
-
-
-
-            //Console.WriteLine(get1[0] + " " + get1[1]);
-
-
-            //byte[] a = Convert.FromBase64String("391Zhoa6ENw=");
-            //string o = Encoding.Default.GetString(a);   //funguje
-            //string[] get = MD5_hasher.GenerateHashWithSalt("vtj8ZQY6ES", o);
-            // Console.WriteLine(get[0] + "  " + get[1]);
-
-            //PKDBF2_hasher p = new PKDBF2_hasher();           //funguje
-            //byte[] omg = Convert.FromBase64String("s4pWON97hBA=");
-            //string o = Encoding.Default.GetString(omg);
-            //string[] get = p.GenerateHash("vtj8ZQY6ES", o);
-
+            
             //    for(int i = 0; i < 5; i++)
             //    {
             //        var thread = new System.Threading.Thread(new System.Threading.ThreadStart(Send));
@@ -313,12 +268,12 @@ namespace Hashing
             //}
             //md5Plain();
             //argon2Plain();
-            // md5sPlain();
+            //md5sPlain();
             //pkbdfPlain();
 
             //argonQuerySalt();
             //md5QuerySalt();
-            //pbkdfQuerySalt();
+            pbkdfQuerySalt();
             Console.ReadKey();
         }
 

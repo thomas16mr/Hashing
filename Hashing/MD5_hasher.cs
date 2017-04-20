@@ -24,10 +24,13 @@ namespace Hashing
             MD5 md5 = new MD5CryptoServiceProvider();
             byte[] tmp = md5.ComputeHash(Encoding.Default.GetBytes(input));
 
-            string result = Convert.ToBase64String(tmp);
-            return result;
+            string resultHash = BitConverter.ToString(tmp);
+            resultHash = resultHash.Replace("-", "");
+            resultHash = resultHash.ToLower();
 
+            return resultHash;
         }
+
         /// <summary>
         /// Funkcia generuje hash s pouzitim MD5(pwd,sal)
         /// ked defaultne nezadame salt, funkcia si vygeneruje salt dlzky 4-8

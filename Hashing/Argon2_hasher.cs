@@ -29,17 +29,20 @@ namespace Hashing
 
             byte[] hash = PasswordHash.ArgonHashBinary(inputToBytes, saltArray, PasswordHash.StrengthArgon.Interactive);
 
-            string resultHash = Convert.ToBase64String(hash);
-            string resultSalt = Convert.ToBase64String(saltArray);
-                    
+            string resultHash = BitConverter.ToString(hash);
+            resultHash = resultHash.Replace("-", "");
+            resultHash = resultHash.ToLower();
 
-            string[] result = new string[2];
-            result[0] = resultHash;
-            result[1] = resultSalt;
+            string resultSalt = BitConverter.ToString(saltArray);
+            resultSalt = resultSalt.Replace("-", "");
+            resultSalt = resultSalt.ToLower();
 
-            return result; 
+            string[] resultArray = new string[2];
+            resultArray[0] = resultHash;
+            resultArray[1] = resultSalt;
 
-
+            //returneme dvojicu hash - salt
+            return resultArray;
         }
 
         public bool VerifyHash(string password, string hash,string salt)
