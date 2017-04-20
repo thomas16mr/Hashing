@@ -272,8 +272,8 @@ namespace Hashing
             //pkbdfPlain();
 
             //argonQuerySalt();
-            //md5QuerySalt();
-            pbkdfQuerySalt();
+            md5QuerySalt();
+            //pbkdfQuerySalt();
             Console.ReadKey();
         }
 

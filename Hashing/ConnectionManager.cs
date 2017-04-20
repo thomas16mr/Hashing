@@ -12,14 +12,16 @@ namespace Hashing
     class ConnectionManager
         {
 
-        public static int k=0;
+        
         public ConnectionManager()
         {
 
         }
         public static void SendData(string URI,string data)
         {
-            k++;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            // the code that you want to measure comes here
+            
             // Create a request using a URL that can receive a post.
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             WebRequest request = WebRequest.Create(URI);
@@ -53,7 +55,9 @@ namespace Hashing
             // Read the content.  
             string responseFromServer = reader.ReadToEnd();
             // Display the content.  
-            Console.Write(k + "--->");
+            watch.Stop();
+            var time = watch.Elapsed.TotalSeconds;
+            Console.Write(time + "--->");
             Console.WriteLine(responseFromServer);
             //Console.WriteLine(responseFromServer.Length);
             // Clean up the streams.  
@@ -65,6 +69,7 @@ namespace Hashing
 
         public static void SendData2(string URI,string []data)
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             WebRequest request = WebRequest.Create(URI);            
             request.Method = "POST";
@@ -171,6 +176,9 @@ namespace Hashing
 
              reader = new StreamReader(dataStream);
              responseFromServer = reader.ReadToEnd();
+            watch.Stop();
+            var time = watch.Elapsed.TotalSeconds;
+            
             Console.WriteLine(responseFromServer);
             reader.Close();
             dataStream.Close();
