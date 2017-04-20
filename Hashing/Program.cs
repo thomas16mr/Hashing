@@ -240,7 +240,7 @@ namespace Hashing
 
         static void Main(string[] args)
         {
-            nacitaj();
+            //nacitaj();
             // naplnArgon();
 
             //funguje
@@ -252,6 +252,39 @@ namespace Hashing
             //naplnMD5S();
             //naplnPBKDF();
             // System.Net.ServicePointManager.DefaultConnectionLimit = 100;
+            string zdroj = "vtj8ZQY6ES";
+
+            byte[] b = Encoding.Default.GetBytes(zdroj);
+            string resultHash = BitConverter.ToString(b);
+            resultHash = resultHash.Replace("-", "");
+            resultHash = resultHash.ToLower();
+
+
+
+           // string[] get = MD5_hasher.GenerateHashWithSalt(zdroj, "");
+            Console.WriteLine(resultHash);
+
+            byte[] bytes = new byte[resultHash.Length / 2];
+            for (var i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] = Convert.ToByte(resultHash.Substring(i * 2, 2), 16);
+            }
+
+            Console.WriteLine(Encoding.Default.GetString(bytes));
+            //byte[] bytes1 = new byte[get[1].Length / 2];
+            //for (var j = 0; j < bytes1.Length; j++)
+            //{
+            //    bytes1[j] = Convert.ToByte(get[1].Substring(j * 2, 2), 16);
+            //}
+
+            //string [] get1= MD5_hasher.GenerateHashWithSalt(get[0],get[1]);
+
+
+
+
+
+
+            //Console.WriteLine(get1[0] + " " + get1[1]);
 
 
             //byte[] a = Convert.FromBase64String("391Zhoa6ENw=");
@@ -272,7 +305,7 @@ namespace Hashing
 
             //}
 
-            
+
             //private void Send()
             //{
             //    for (int i = 0; i < 100; i++)

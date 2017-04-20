@@ -13,6 +13,7 @@ namespace Hashing
         {
 
         }
+
         /// <summary>
         /// Funkcia generuje cisty hash MD5 bez saltu
         /// </summary>
@@ -51,8 +52,6 @@ namespace Hashing
 
                 RNGCryptoServiceProvider randNumGen = new RNGCryptoServiceProvider();
                 randNumGen.GetNonZeroBytes(saltArray);
-               //Console.WriteLine(Convert.ToBase64String(saltArray));
-
 
             }
             // v tomto pripade dostaneme salt ako parameter, len potrebujeme dat do tvaru byte array lebo funckia potrebuje
@@ -64,11 +63,8 @@ namespace Hashing
 
 
             string sb = input + Encoding.Default.GetString(saltArray);
-
             
             byte[] inputWithSalt = Encoding.Default.GetBytes(sb);
-
-
 
             //zacneme hashovat
             using (MD5 md5Hash = MD5.Create())
@@ -79,10 +75,17 @@ namespace Hashing
             
                 //result array obsahuje vysledny hash a salt ktore chceme vratit
                 string[] resultArray = new string[2];
-            resultArray[0] = Convert.ToBase64String(tmp);
 
-                
-            resultArray[1] = Convert.ToBase64String(saltArray);
+                string resultHash = BitConverter.ToString(tmp);
+                resultHash = resultHash.Replace("-", "");
+                resultHash = resultHash.ToLower();
+
+                string resultSalt = BitConverter.ToString(saltArray);
+                resultSalt = resultSalt.Replace("-", "");
+                resultSalt = resultSalt.ToLower();
+
+                resultArray[0] = resultHash;
+                resultArray[1] = resultSalt;
 
             //returneme dvojicu hash - salt
             return resultArray;
