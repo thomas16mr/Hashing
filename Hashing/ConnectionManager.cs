@@ -59,7 +59,7 @@ namespace Hashing
             var time = watch.Elapsed.TotalSeconds;
             Console.Write(time + "--->");
             Console.WriteLine(responseFromServer);
-            Program.uloz(time.ToString(), responseFromServer);
+            Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
             //Console.WriteLine(responseFromServer.Length);
             // Clean up the streams.  
             reader.Close();
@@ -182,6 +182,7 @@ namespace Hashing
             var time = watch.Elapsed.TotalSeconds;
             
             Console.WriteLine(time + "  " +responseFromServer);
+            Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
             reader.Close();
             dataStream.Close();
             response.Close();

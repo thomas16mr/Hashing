@@ -18,6 +18,7 @@ namespace Hashing
     {
         //public List do ktoreho ulozime dvojice meno,heslo
         public static List<Tuple<string, string>> users = new List<Tuple<string, string>>();
+        public static List<Tuple<string, string>> output = new List<Tuple<string, string>>();
 
         /// <summary>
         /// Funkcia nacita dvojice meno,heslo zo suboru a ulozi ich do listu
@@ -239,11 +240,14 @@ namespace Hashing
             }
         }
 
-        public static void uloz(string klient,string server)
+        public static void uloz()
         {
-            using (StreamWriter writetext = File.AppendText(@"C: \Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\write.csv"))
+            foreach (Tuple<string, string> s in output)
             {
-                writetext.WriteLine(klient + ";" + server);
+                using (StreamWriter writetext = File.AppendText(@"C: \Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\write.csv"))
+                {
+                    writetext.WriteLine(s.Item1 + ";" + s.Item2);
+                }
             }
 
         }
@@ -255,13 +259,13 @@ namespace Hashing
             //naplnMD5S();
             //naplnPBKDF();
 
-            md5Plain();
+            //md5Plain();
             //argon2Plain();
-            //md5sPlain();
+            md5sPlain();
             //pkbdfPlain();
 
-            //argonQuerySalt();
-            //md5QuerySalt();
+           // argonQuerySalt();
+           //md5QuerySalt();
             //pbkdfQuerySalt();
 
         }
@@ -270,7 +274,7 @@ namespace Hashing
         {
             nacitaj();
 
-            int pocetTredov = 1;
+            int pocetTredov = 4;
 
 
             for (int i = 0; i < pocetTredov; i++)
@@ -279,9 +283,9 @@ namespace Hashing
                 thread.Start();
             }
 
-            
-            
             Console.ReadKey();
+            uloz();
+            
         }
 
     }
