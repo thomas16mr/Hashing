@@ -142,14 +142,15 @@ namespace Hashing
         /// <summary>
         /// 
         /// </summary>
-        public static void md5Plain()
+        public static void md5Plain(int n)
         {
-            foreach (Tuple<string, string> t in users)
+             //(Tuple<string, string> t in users)
+             for(int i =0;i<n;i++)
             {
                 JArray array = new JArray();
                 array.Add("1");
-                array.Add(t.Item1);
-                array.Add(t.Item2);
+                array.Add(users[i % n].Item1);
+                array.Add(users[i % n].Item2);
                 
                 JObject o = new JObject();
                 o["MyArray"] = array;
@@ -173,14 +174,14 @@ namespace Hashing
             }
         }
 
-        public static void argon2Plain()
+        public static void argon2Plain(int n)
         {
-            foreach (Tuple<string, string> t in users)
+            for (int i = 0; i < n; i++)
             {
                 JArray array = new JArray();
                 array.Add("3");
-                array.Add(t.Item1);
-                array.Add(t.Item2);
+                array.Add(users[i % n].Item1);
+                array.Add(users[i % n].Item2);
 
                 JObject o = new JObject();
                 o["MyArray"] = array;
@@ -216,14 +217,15 @@ namespace Hashing
                 ConnectionManager.SendData2("https://147.175.98.36/fetch.php", postData);
             }
         }
-        public static void argonQuerySalt()
+        public static void argonQuerySalt(int n)
         {
-            foreach (Tuple<string, string> t in users)
+            for (int i = 0; i < n; i++)
             {
+               
                 string[] postData = new string[3];
                 postData[0] = "2";
-                postData[1] = t.Item1;
-                postData[2] = t.Item2;
+                postData[1] = users[i % n].Item1;
+                postData[2] = users[i % n].Item2;
                 ConnectionManager.SendData2("https://147.175.98.36/fetch.php", postData);
             }
         }
@@ -252,35 +254,39 @@ namespace Hashing
 
         }
 
-        public static void send()
+        public static void send(object n)
         {
-            // naplnArgon();
-            //naplnMD5();
-            //naplnMD5S();
-            //naplnPBKDF();
+            int nRequests = (int)n;
 
-            //md5Plain();
-            //argon2Plain();
-            md5sPlain();
-            //pkbdfPlain();
+            // md5Plain(nRequests);
+            //argon2Plain(nRequests);
+            //md5sPlain(nRequests);
+            //pkbdfPlain(nRequests);
 
-           // argonQuerySalt();
-           //md5QuerySalt();
-            //pbkdfQuerySalt();
+            // 
+
+            argonQuerySalt(nRequests);
+            //md5QuerySalt(nRequests);
+            //pbkdfQuerySalt(nRequests);
 
         }
 
         static void Main(string[] args)
         {
             nacitaj();
+            // naplnArgon();
+            //naplnMD5();
+            //naplnMD5S();
+            //naplnPBKDF();
 
-            int pocetTredov = 4;
-
+            int pocetTredov = 2;
+            int pocetRequestov= 600;
+            int n = pocetRequestov / pocetTredov;
 
             for (int i = 0; i < pocetTredov; i++)
             {
-                var thread = new System.Threading.Thread(new System.Threading.ThreadStart(send));
-                thread.Start();
+                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
+                thread.Start(n);
             }
 
             Console.ReadKey();
