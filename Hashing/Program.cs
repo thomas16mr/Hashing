@@ -213,12 +213,22 @@ namespace Hashing
 
         public static void uloz()
         {
-            foreach (Tuple<string, string> s in output)
+            try
             {
-                using (StreamWriter writetext = File.AppendText(@"C: \Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\write.csv"))
+                foreach (Tuple<string, string> s in output)
                 {
-                    writetext.WriteLine(s.Item1 + ";" + s.Item2);
+                    using (StreamWriter writetext = File.AppendText(@"C: \Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\write.csv"))
+                    {
+                        writetext.WriteLine(s.Item1 + ";" + s.Item2);
+                    }
                 }
+            }
+            catch
+            {
+                Console.WriteLine("Zapis do suboru je neuspesni!");
+                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                proc.Kill();
+
             }
 
         }
