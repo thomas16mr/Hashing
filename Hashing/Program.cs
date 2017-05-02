@@ -19,7 +19,7 @@ namespace Hashing
         // public Listy do ktoreho ulozime dvojice meno,heslo
         // jeden list pre input a druhy pre output
         public static List<Tuple<string, string>> users = new List<Tuple<string, string>>();
-        public static List<Tuple<string, string>> output = new List<Tuple<string, string>>();
+        public static List<Tuple<double, string>> output = new List<Tuple<double, string>>();
         public static int typ = 0;
         
         // Funkcia nacita dvojice meno,heslo zo suboru a ulozi ich do listu
@@ -215,7 +215,7 @@ namespace Hashing
         {
             try
             {
-                foreach (Tuple<string, string> s in output)
+                foreach (Tuple<double, string> s in output)
                 {
                     using (StreamWriter writetext = File.AppendText(@"C: \Users\Tomáš Baka\Documents\Visual Studio 2015\Projects\Hashing\Hashing\write.csv"))
                     {
@@ -299,6 +299,8 @@ namespace Hashing
                             System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
                             proc.Kill();
                         }
+                        Console.WriteLine("Press any key");
+                        Console.ReadKey();
                     }
                     else
                     {
@@ -340,7 +342,7 @@ namespace Hashing
                                 var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
                                 thread.Start(n);
                             }
-
+                            
                         }
                         else if (args[2] == "2")
                         {
@@ -497,15 +499,17 @@ namespace Hashing
                             Console.WriteLine("Treti parameter je zly!!");
                             Console.WriteLine("Pri tejto kombinacii (5 parametrov) musi to byt 1, 2 alebo 3");
                         }
+                        
                     }
-                    else
+                     else
                     {
                         Console.WriteLine("Druhy parameter je zly!!");
                         Console.WriteLine("Pri tejto kombinacii (5 parametrov) musi to bit 1 alebo 2");
                         System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
                         proc.Kill();
                     }
-
+                    Console.ReadKey();
+                    uloz();                    
                 }
                 else
                 {
@@ -514,7 +518,7 @@ namespace Hashing
                     System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
                     proc.Kill();
                 }
-
+               
             }
             else
             {
@@ -522,12 +526,7 @@ namespace Hashing
                 System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
                 proc.Kill();
             }
-
-
-            Console.WriteLine("Stlac klaves pre ulozenie do suboru");
-            Console.ReadKey();
-            uloz();
-
+           
         }
 
     }

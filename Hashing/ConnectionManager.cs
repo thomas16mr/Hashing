@@ -27,8 +27,7 @@ namespace Hashing
             WebRequest request = WebRequest.Create(URI);
            // Set the Method property of the request to POST.
               request.Method = "POST";
-           
-            
+                      
             // Create POST data and convert it to a byte array.  
             string postData = "message=" + data;
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
@@ -41,8 +40,7 @@ namespace Hashing
             // Write the data to the request stream.  
             dataStream.Write(byteArray, 0, byteArray.Length);
             // Close the Stream object.  
-            dataStream.Close();
-          
+            dataStream.Close();      
            
             WebResponse response = request.GetResponse();
             // Display the status.  
@@ -57,9 +55,17 @@ namespace Hashing
             // Display the content.  
             watch.Stop();
             var time = watch.Elapsed.TotalSeconds;
-            Console.Write(time + "--->");
-            Console.WriteLine(responseFromServer);
-            Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
+
+            if(!String.IsNullOrEmpty(responseFromServer))
+            { 
+                Program.output.Add(new Tuple<double, string>(time, responseFromServer));
+                Console.WriteLine("Klient: " + time + " Server:" + responseFromServer);
+            }
+            else
+            {
+                Console.WriteLine("Klient:" + time);
+            }          
+            
             //Console.WriteLine(responseFromServer.Length);
             // Clean up the streams.  
             reader.Close();
@@ -180,9 +186,11 @@ namespace Hashing
              responseFromServer = reader.ReadToEnd();
             watch.Stop();
             var time = watch.Elapsed.TotalSeconds;
-            
-            Console.WriteLine(time + "  " +responseFromServer);
-            Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
+                             
+            Program.output.Add(new Tuple<double, string>(time, responseFromServer));
+            Console.WriteLine("Klient: " + time + " Server: " +responseFromServer);
+           
+
             reader.Close();
             dataStream.Close();
             response.Close();
