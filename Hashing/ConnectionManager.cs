@@ -59,7 +59,7 @@ namespace Hashing
             var time = watch.Elapsed.TotalSeconds;
             Console.Write(time + "--->");
             Console.WriteLine(responseFromServer);
-            Program.output.Add(new Tuple<string, string>(string.Format("ThreadID: {0}, TIME: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, time.ToString()), responseFromServer));
+            Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
             //Console.WriteLine(responseFromServer.Length);
             // Clean up the streams.  
             reader.Close();

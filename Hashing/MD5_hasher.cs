@@ -6,29 +6,12 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Hashing
-{   
+{
     class MD5_hasher
     {
-       public MD5_hasher()
+        public MD5_hasher()
         {
 
-        }
-
-        /// <summary>
-        /// Funkcia generuje cisty hash MD5 bez saltu
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string GenerateHashWithoutSalt(string input)
-        {
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] tmp = md5.ComputeHash(Encoding.Default.GetBytes(input));
-
-            string resultHash = BitConverter.ToString(tmp);
-            resultHash = resultHash.Replace("-", "");
-            resultHash = resultHash.ToLower();
-
-            return resultHash;
         }
 
         /// <summary>
@@ -38,7 +21,7 @@ namespace Hashing
         /// <param name="input"></param>
         /// <param name="salt"></param>
         /// <returns></returns>
-        public static string[] GenerateHashWithSalt(string input,string salt)
+        public static string[] GenerateHashWithSalt(string input, string salt)
         {
             byte[] saltArray;
 
@@ -66,7 +49,7 @@ namespace Hashing
 
 
             string sb = input + Encoding.Default.GetString(saltArray);
-            
+
             byte[] inputWithSalt = Encoding.Default.GetBytes(sb);
 
             //zacneme hashovat
@@ -75,7 +58,7 @@ namespace Hashing
 
                 byte[] tmp = md5Hash.ComputeHash(inputWithSalt);
 
-            
+
                 //result array obsahuje vysledny hash a salt ktore chceme vratit
                 string[] resultArray = new string[2];
 
@@ -90,31 +73,9 @@ namespace Hashing
                 resultArray[0] = resultHash;
                 resultArray[1] = resultSalt;
 
-            //returneme dvojicu hash - salt
-            return resultArray;
+                //returneme dvojicu hash - salt
+                return resultArray;
             }
         }
-
-        /// <summary>
-        /// Funkcia verifykuje ci zadane haslo a hash su identicke
-        /// Verifykuje iba MD5 hash bez saltu
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        public bool verifyMd5HashWithoutSalt(string input, string hash)
-        {
-            string inputHash = GenerateHashWithoutSalt(input);
-
-            StringComparer SC = StringComparer.OrdinalIgnoreCase;
-
-            if (SC.Compare(inputHash, hash) == 1)
-            {
-                return false;
-            }
-            else return true;
-
-            
-        }
-    }
+    }  
 }
