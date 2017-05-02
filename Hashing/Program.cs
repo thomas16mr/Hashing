@@ -20,6 +20,7 @@ namespace Hashing
         // jeden list pre input a druhy pre output
         public static List<Tuple<string, string>> users = new List<Tuple<string, string>>();
         public static List<Tuple<string, string>> output = new List<Tuple<string, string>>();
+        public static int typ = 0;
         
         // Funkcia nacita dvojice meno,heslo zo suboru a ulozi ich do listu
         //ked pouzivatel zadal zlu cestu alebo subor je pouzivany inym programov
@@ -225,27 +226,48 @@ namespace Hashing
         public static void send(object n)
         {
             int nRequests = (int)n;
-
-            md5Plain(nRequests);
-
-            
-            // argon2Plain(nRequests);
-            //pkbdfPlain(nRequests);
-
-            //md5QuerySalt(nRequests);
-
-            //argonQuerySalt(nRequests);
-
-           //pbkdfQuerySalt(nRequests);
-
+          
+            switch(Program.typ)
+            {
+                case 1:
+                    md5Plain(nRequests);
+                    break;
+                case 2:
+                    argon2Plain(nRequests);
+                    break;
+                case 3:
+                    pkbdfPlain(nRequests);
+                    break;
+                case 4:
+                    md5QuerySalt(nRequests);
+                    break;
+                case 5:
+                    argonQuerySalt(nRequests);
+                    break;
+                case 6:
+                    pbkdfQuerySalt(nRequests);
+                    break;
+                default:
+                    Console.WriteLine("Niekde sa nastala chyba, zopakujte znova!!");
+                    System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                    proc.Kill();
+                    break;
+            }      
         }
 
         static void Main(string[] args)
         {
+            int pocetTredov = 1;
+            int pocetRequestov = 0;
+            int j = 0;
+            int k = 1;
+            int n = 0;
+            
+
             if (args.Length > 0)
             {
                 nacitaj(args[0]);
-                if(args.Length == 2)
+                if(args.Length == 3)
                 {
                     if(args[1] == "0")
                     {
@@ -271,19 +293,216 @@ namespace Hashing
                     else
                     {
                         Console.WriteLine("Druhy parameter je zly!!");
-                        Console.WriteLine("Pre naplnanie databazy potrebujeme 2 parametre: cesta a cislo 0");
+                        Console.WriteLine("Pre naplnenie databazy potrebujeme 3 parametre: cesta k suboru, 0 pre naplnenie databazy, cislo databazy");
                         System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
                         proc.Kill();
                     }                    
                 }
                 else if(args.Length == 5)
                 {
+                    if(args[1] == "1")
+                    {
+                        if(args[2] == "1")
+                        {
+                            Program.typ = 1;
+                                                        
+                            if (Int32.TryParse(args[3], out j))
+                                pocetRequestov = j;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! stvrty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+                            
+                            if (Int32.TryParse(args[4], out k))
+                                pocetTredov = k;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! piaty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+                            n = pocetRequestov / pocetTredov;
+
+                            for (int i = 0; i < pocetTredov; i++)
+                            {
+                                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
+                                thread.Start(n);
+                            }
+
+                        }
+                        else if (args[2] == "2")
+                        {
+                            Program.typ = 2;
+                            if (Int32.TryParse(args[3], out j))
+                                pocetRequestov = j;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! stvrty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+
+                            if (Int32.TryParse(args[4], out k))
+                                pocetTredov = k;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! piaty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+                            n = pocetRequestov / pocetTredov;
+
+                            for (int i = 0; i < pocetTredov; i++)
+                            {
+                                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
+                                thread.Start(n);
+                            }
+                        }
+                        else if (args[2] == "3")
+                        {
+                            Program.typ = 3;
+                            if (Int32.TryParse(args[3], out j))
+                                pocetRequestov = j;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! stvrty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+
+                            if (Int32.TryParse(args[4], out k))
+                                pocetTredov = k;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! piaty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+                            n = pocetRequestov / pocetTredov;
+
+                            for (int i = 0; i < pocetTredov; i++)
+                            {
+                                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
+                                thread.Start(n);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Treti parameter je zly!!");
+                            Console.WriteLine("Pri tejto kombinacii (5 parametrov) musi to byt 1, 2 alebo 3");
+                            System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                            proc.Kill();
+                        }
+                    }
+                    else if (args[1] == "2")
+                    {
+                        if (args[2] == "1")
+                        {
+                            Program.typ = 4;
+                            if (Int32.TryParse(args[3], out j))
+                                pocetRequestov = j;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! stvrty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+
+                            if (Int32.TryParse(args[4], out k))
+                                pocetTredov = k;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! piaty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+                            n = pocetRequestov / pocetTredov;
+
+                            for (int i = 0; i < pocetTredov; i++)
+                            {
+                                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
+                                thread.Start(n);
+                            }
+                        }
+                        else if (args[2] == "2")
+                        {
+                            Program.typ = 5;
+                            if (Int32.TryParse(args[3], out j))
+                                pocetRequestov = j;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! stvrty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+
+                            if (Int32.TryParse(args[4], out k))
+                                pocetTredov = k;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! piaty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+                            n = pocetRequestov / pocetTredov;
+
+                            for (int i = 0; i < pocetTredov; i++)
+                            {
+                                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
+                                thread.Start(n);
+                            }
+                        }
+                        else if (args[2] == "3")
+                        {
+                            Program.typ = 6;
+                            if (Int32.TryParse(args[3], out j))
+                                pocetRequestov = j;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! stvrty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+
+                            if (Int32.TryParse(args[4], out k))
+                                pocetTredov = k;
+                            else
+                            {
+                                Console.WriteLine("Chyba!! piaty parameter nie je cislo");
+                                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                                proc.Kill();
+                            }
+                            n = pocetRequestov / pocetTredov;
+
+                            for (int i = 0; i < pocetTredov; i++)
+                            {
+                                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
+                                thread.Start(n);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Treti parameter je zly!!");
+                            Console.WriteLine("Pri tejto kombinacii (5 parametrov) musi to byt 1, 2 alebo 3");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Druhy parameter je zly!!");
+                        Console.WriteLine("Pri tejto kombinacii (5 parametrov) musi to bit 1 alebo 2");
+                        System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                        proc.Kill();
+                    }
 
                 }
                 else
                 {
-                    Console.WriteLine("Tato aplikacia potrebuje 2 alebo 5 parametrov!!");
+                    Console.WriteLine("Tato aplikacia potrebuje 3 alebo 5 parametrov!!");
                     Console.WriteLine("Skontrolujte, ci ste zadali dobre");
+                    System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                    proc.Kill();
                 }
 
             }
@@ -293,21 +512,9 @@ namespace Hashing
                 System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
                 proc.Kill();
             }
-            // 
-            //
-            //
 
-            // Console.WriteLine(args[0]);
-            int pocetTredov = 2;
-            int pocetRequestov = 600;
-            int n = pocetRequestov / pocetTredov;
 
-            for (int i = 0; i < pocetTredov; i++)
-            {
-                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
-                thread.Start(n);
-            }
-
+            Console.WriteLine("Stlac klaves pre ulozenie do suboru");
             Console.ReadKey();
             uloz();
 
