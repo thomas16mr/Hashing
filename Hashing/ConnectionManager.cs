@@ -12,7 +12,7 @@ namespace Hashing
     class ConnectionManager
         {
 
-        
+        public static int c;
         public ConnectionManager()
         {
 
@@ -21,7 +21,7 @@ namespace Hashing
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
             // the code that you want to measure comes here
-            System.Net.ServicePointManager.DefaultConnectionLimit = 100;
+            
             // Create a request using a URL that can receive a post.
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             WebRequest request = WebRequest.Create(URI);
@@ -53,18 +53,21 @@ namespace Hashing
             // Read the content.  
             string responseFromServer = reader.ReadToEnd();
             // Display the content.  
+            c++;
             watch.Stop();
             var time = watch.Elapsed.TotalSeconds;
-
-            if(!String.IsNullOrEmpty(responseFromServer))
-            { 
-                Program.output.Add(new Tuple<double, string>(time, responseFromServer));
-                Console.WriteLine("Klient: " + time + " Server:" + responseFromServer);
-            }
-            else
+            try
             {
-                Console.WriteLine("Klient:" + time);
-            }          
+                Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
+                Console.WriteLine(c + ": Klient: " + time.ToString() + " Server:" + responseFromServer);
+            }
+            catch
+            {
+                Console.WriteLine("Chyba, viac tredov chce pristupit k tomu istemu listu");
+                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                proc.Kill();
+            }                      
+                    
             
             //Console.WriteLine(responseFromServer.Length);
             // Clean up the streams.  
@@ -76,7 +79,7 @@ namespace Hashing
 
         public static void SendData2(string URI,string []data)
         {
-            System.Net.ServicePointManager.DefaultConnectionLimit = 100;
+            
             var watch = System.Diagnostics.Stopwatch.StartNew();
             System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             WebRequest request = WebRequest.Create(URI);            
@@ -186,10 +189,20 @@ namespace Hashing
              responseFromServer = reader.ReadToEnd();
             watch.Stop();
             var time = watch.Elapsed.TotalSeconds;
-                             
-            Program.output.Add(new Tuple<double, string>(time, responseFromServer));
-            Console.WriteLine("Klient: " + time + " Server: " +responseFromServer);
-           
+            try
+            {
+                
+                Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
+                Console.WriteLine("Klient: " + time.ToString() + " Server: " + responseFromServer);
+            }
+            catch
+            {
+                Console.WriteLine("Chyba, viac tredov chce pristupit k tomu istemu listu");
+                System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
+                proc.Kill();
+            }
+            
+                   
 
             reader.Close();
             dataStream.Close();
