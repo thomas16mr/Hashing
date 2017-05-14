@@ -203,7 +203,7 @@ namespace Hashing
                 {
                     Program.output.Add(new Tuple<string, string>(time.ToString(), responseFromServer));
                 }
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId + "Klient: " + time.ToString() + " Server: " + responseFromServer);
+                Console.WriteLine("Klient: " + time.ToString() + " Server: " + responseFromServer);
             }
             catch
             {
