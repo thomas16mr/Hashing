@@ -56,7 +56,7 @@ namespace Hashing
             foreach (Tuple<string, string> t in users)
             {
                 string[] get = Argon2_hasher.GenerateHash(t.Item2, "");
-
+                //pouzivame JSON objekt na komunikaciu
                 JArray array = new JArray();
                 array.Add(t.Item1);
                 array.Add(get[0]);
@@ -73,16 +73,15 @@ namespace Hashing
         }
 
 
-        /// <summary>
-        /// Funkcia prejde cely list dvojic meno,heslo , zahashuje heslo pomocou MD5 so saltom a posiela request na server kde sa ulozi hash do databazy
-        /// </summary>
-        public static void naplnMD5()
+        
+        // Funkcia prejde cely list dvojic meno,heslo , zahashuje heslo pomocou MD5 so saltom a posiela request na server kde sa ulozi hash do databazy
+         public static void naplnMD5()
         {
             foreach (Tuple<string, string> t in users)
             {
 
                 string[] get = MD5_hasher.GenerateHashWithSalt(t.Item2, "");
-
+                
                 JArray array = new JArray();
                 array.Add(t.Item1);
                 array.Add(get[0]);
@@ -99,10 +98,9 @@ namespace Hashing
             }
         }
 
-        /// <summary>
-        /// Funkcia prejde cely list dvojic meno,heslo , zahashuje heslo pomocou PBKDF2 a posiela request na server kde sa ulozi hash do databazy
-        /// </summary>
-        static void naplnPBKDF()
+       
+        // Funkcia prejde cely list dvojic meno,heslo , zahashuje heslo pomocou PBKDF2 a posiela request na server kde sa ulozi hash do databazy
+         static void naplnPBKDF()
         {
             foreach (Tuple<string, string> t in users)
             {
@@ -124,7 +122,7 @@ namespace Hashing
             }
         }
 
-
+        // demonstracia autentifikacie MD5 so saltom sposob 1
         public static void md5Plain(int n)
         {
 
@@ -142,7 +140,7 @@ namespace Hashing
             }
         }
 
-
+        // demonstracia autentifikacie Argon2 sposob 1
         public static void argon2Plain(int n)
         {
             for (int i = 0; i < n; i++)
@@ -159,6 +157,7 @@ namespace Hashing
             }
         }
 
+        // demonstracia autentifikacie PBKDF2  sposob 1
         public static void pkbdfPlain(int n)
         {
             for (int i = 0; i < n; i++)
@@ -175,6 +174,7 @@ namespace Hashing
             }
         }
 
+        //autentifikacia sposob 2 MD5 so saltom
         public static void md5QuerySalt(int n)
         {
             for (int i = 0; i < n; i++)
@@ -186,6 +186,7 @@ namespace Hashing
                 ConnectionManager.SendData2("https://147.175.98.36/fetch.php", postData);
             }
         }
+        //autentifikacia sposob 2 Argon2
         public static void argonQuerySalt(int n)
         {
             for (int i = 0; i < n; i++)
@@ -199,6 +200,7 @@ namespace Hashing
             }
         }
 
+        //autentifikacia sposob 2 PBKDF2
         public static void pbkdfQuerySalt(int n)
         {
             for (int i = 0; i < n; i++)
@@ -211,6 +213,7 @@ namespace Hashing
             }
         }
 
+        //funkcia ulozi obsah listu do suboru
         public static void uloz()
         {
             try
@@ -234,6 +237,7 @@ namespace Hashing
 
         }
 
+        //funckia ktora zavola zelanu funkciu
         public static void send(object n)
         {
             int nRequests = (int)n;
@@ -267,36 +271,32 @@ namespace Hashing
             }      
         }
 
-        public static void startThreading(int pocetT,int n)
+        //funkcia na vytvorenie tredov
+       public static void startThreading(int pocetT,int n)
         {
+            ThreadPool.SetMinThreads(pocetT, pocetT);
+            
             for (int i = 0; i < pocetT; i++)
             {
-                var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
-                thread.Start(n);
-                thread.Join();
-            }
+                ThreadPool.QueueUserWorkItem(new WaitCallback(send), n);
+                
+            }            
         }
 
-        static void Main(string[] args)
-        {
 
-            // nacitaj(args[0]);
+
+        //pogram spustime cez prikazovy riadok
+        //prvy parameter je cesta k suboru users.csv -> "C:\Hashing\Hashing\bin\Release\users.csv" aj s uvodzovkami
+        // druhy parameter ked je 0, tak chceme naplnit databazy => treti param: 1(MD5),2(ARGON2),3(PBKDF2)
+        //druhy parameter ked je 1 -> sposob autentifikacie 1 => treti param:1(MD5),2(ARGON2),3(PBKDF2)=> stvrty param: pocetRequestov,piaty param:pocetTredov
+        //druhy parameter ked je 2 -> sposob autentifikacie 2 => treti param:1(MD5),2(ARGON2),3(PBKDF2)=> stvrty param: pocetRequestov,piaty param:pocetTredov
+      static void Main(string[] args)
+        {
             int pocetTredov = 1;
             int pocetRequestov = 1;
             int j = 0;
             int k = 1;
             int n = 0;
-            // n = pocetRequestov / pocetTredov;
-            //// Program.typ = 1;
-
-            //     for (int i = 0; i < pocetTredov; i++)
-            //     {
-            //         var thread = new System.Threading.Thread(new ParameterizedThreadStart(send));
-
-            //         thread.Start(n);
-            //         thread.Join();
-            // }
-
 
             if (args.Length > 0)
              {
@@ -586,10 +586,10 @@ namespace Hashing
                  System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
                  proc.Kill();
              }
+           
             Console.ReadKey();
             uloz();
-
-
+          
         }
     }
 } 

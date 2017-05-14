@@ -11,6 +11,9 @@ namespace Hashing
     {
         public Argon2_hasher(){}
 
+        //funckia hashuje zadane haslo
+        //ked nezdame salt tak vyrobi
+        //vrati vysledny hash aj salt vo forme hexa cisla
         public static string[] GenerateHash(string input,string salt)
         {
             byte[] saltArray;
@@ -43,22 +46,6 @@ namespace Hashing
 
             //returneme dvojicu hash - salt
             return resultArray;
-        }
-
-        public bool VerifyHash(string password, string hash,string salt)
-        {
-
-            string[] get = GenerateHash(password, salt);
-
-            StringComparer sc = StringComparer.OrdinalIgnoreCase;
-
-            if (sc.Compare(hash, get[0]) == 1)
-            {
-                return false;
-            }
-
-            else return true;
-
-        }
+        }       
     }
 }

@@ -11,6 +11,9 @@ namespace Hashing
     {
         public PKDBF2_hasher() { }
 
+        //funckia hashuje zadane haslo
+        //ked nezdame salt tak vyrobi
+        //vrati vysledny hash aj salt vo forme hexa cisla
         public static string[] GenerateHash(string pass, string salt)
         {
             byte[] saltArray;
@@ -53,24 +56,6 @@ namespace Hashing
 
             //returneme dvojicu hash - salt
             return resultArray;
-        }
-
-
-        public bool VerifyHash(string hash, string pass, string salt)
-        {
-
-            string[] get = new string[2];
-            get = GenerateHash(pass, salt);
-
-            StringComparer sc = StringComparer.OrdinalIgnoreCase;
-
-            if(sc.Compare(hash,get[0]) == 1)
-            {
-                return false;
-            }
-
-            else  return true;
-        }
-         
+        }         
     }
 }
